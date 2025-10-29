@@ -1,34 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Notes Tracker</title>
+  <meta charset="UTF-8" />
+  <title>Notes Tracker ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: sans-serif; margin: 2rem; }
-    .note { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 8px; }
+    :root {
+      --gradient-bg: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      --accent: #6a0dad;
+      --soft-white: rgba(255, 255, 255, 0.85);
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: var(--gradient-bg);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 2rem;
+      color: #fff;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
+    }
+
+    .clock {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: white;
+      font-size: 1.2rem;
+      backdrop-filter: blur(6px);
+    }
+
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    input, textarea {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .notes-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      width: 90%;
+      max-width: 900px;
+      margin-bottom: 50px;
+    }
+
+    .note {
+      background: var(--soft-white);
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .note:hover {
+      transform: scale(1.03);
+    }
+
+    .note h3 {
+      margin: 0;
+      color: var(--accent);
+    }
+
+    .note p {
+      margin: 5px 0 10px;
+      color: #444;
+    }
+
+    .note button {
+      background: #ff5c5c;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .signature {
+      position: fixed;
+      bottom: 10px;
+      left: 20px;
+      font-family: 'Dancing Script', cursive;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
-<body>
-  <h1>My Notes</h1>
-  <div id="notes"></div>
 
-  <h3>Add a Note</h3>
-  <input id="title" placeholder="Title">
-  <input id="content" placeholder="Content">
-  <button id="addBtn">Add</button>
+<body>
+  <div class="clock" id="clock"></div>
+  <h1>Notes Tracker 📝</h1>
+
+  <div class="input-section">
+    <input id="title" placeholder="Note title..." />
+    <textarea id="content" placeholder="Write something..." rows="3"></textarea>
+    <button onclick="addNote()">Add Note</button>
+  </div>
+
+  <div class="notes-container" id="notes"></div>
+
+  <div class="signature" onclick="toggleLinks()">made by GG 💜</div>
+  <div id="links" style="display:none; position:fixed; bottom:50px; left:20px; background:white; padding:10px; border-radius:10px;">
+    <a href="https://github.com/gg-hgew" target="_blank">GitHub</a><br>
+    <a href="https://www.instagram.com/gayatriii222" target="_blank">Instagram</a><br>
+    <a href="https://www.linkedin.com/in/gayathri-gorantla-9089a524a/" target="_blank">LinkedIn</a>
+  </div>
 
   <script>
-    const baseUrl = "http://localhost:5000";
+    const baseUrl = "https://notes-tracker.onrender.com"; // ✅ Your deployed backend URL
 
     async function loadNotes() {
       const res = await fetch(`${baseUrl}/notes`);
-      const notes = await res.json();
+      const data = await res.json();
       const container = document.getElementById("notes");
-      container.innerHTML = notes.map(n => `
+      container.innerHTML = data.map(note => `
         <div class="note">
-          <h3>${n.title}</h3>
-          <p>${n.content}</p>
-          <button onclick="deleteNote('${n.title}')">Delete</button>
+          <h3>${note.title}</h3>
+          <p>${note.content}</p>
+          <button onclick="deleteNote('${note.title}')">Delete</button>
         </div>
       `).join("");
     }
@@ -36,11 +169,14 @@
     async function addNote() {
       const title = document.getElementById("title").value;
       const content = document.getElementById("content").value;
+      if (!title.trim() || !content.trim()) return alert("Add both title and content!");
       await fetch(`${baseUrl}/notes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, content })
       });
+      document.getElementById("title").value = "";
+      document.getElementById("content").value = "";
       loadNotes();
     }
 
@@ -49,7 +185,18 @@
       loadNotes();
     }
 
-    document.getElementById("addBtn").addEventListener("click", addNote);
+    function toggleLinks() {
+      const box = document.getElementById("links");
+      box.style.display = box.style.display === "none" ? "block" : "none";
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").textContent = now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
     loadNotes();
   </script>
 </body>
