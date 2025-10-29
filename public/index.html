@@ -1,482 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sunflower Notes</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sunflower Notes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #FFF8DC 0%, #FFFACD 50%, #FFE4B5 100%);
-            min-height: 100vh;
-            padding: 2rem;
-            position: relative;
-            overflow-x: hidden;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #FFF8DC 0%, #FFFACD 100%);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      color: #2c3e50;
+    }
 
-        /* Decorative sunflower petals background */
-        .petal {
-            position: fixed;
-            pointer-events: none;
-            opacity: 0.1;
-            font-size: 4rem;
-            animation: float 6s ease-in-out infinite;
-        }
+    /* Header Section */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeIn 0.6s ease-in;
+    }
 
-        .petal:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
-        .petal:nth-child(2) { top: 20%; right: 8%; animation-delay: 1s; }
-        .petal:nth-child(3) { bottom: 15%; left: 10%; animation-delay: 2s; }
-        .petal:nth-child(4) { bottom: 25%; right: 5%; animation-delay: 1.5s; }
+    .header h1 {
+      font-size: 3rem;
+      color: #E8A317;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(232, 163, 23, 0.1);
+      letter-spacing: 1px;
+    }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
+    .sunflower-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+      animation: sway 3s ease-in-out infinite;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
+    .header p {
+      color: #52B788;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: slideDown 0.6s ease-out;
-        }
+    /* Main Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    /* Add Note Section */
+    .add-note-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(232, 163, 23, 0.15);
+      margin-bottom: 3rem;
+      border: 2px solid #F4D03F;
+      animation: slideUp 0.6s ease-out;
+    }
 
-        .header-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #F4D03F 0%, #E8A317 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
-        }
+    .add-note-section h2 {
+      color: #E8A317;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
 
-        .sunflower-emoji {
-            display: inline-block;
-            font-size: 4rem;
-            margin: 0 1rem;
-            animation: sway 3s ease-in-out infinite;
-        }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
 
-        @keyframes sway {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
+    .input-group input {
+      padding: 0.875rem 1rem;
+      border: 2px solid #F4D03F;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: #FFFEF5;
+    }
 
-        .subtitle {
-            color: #52B788;
-            font-size: 1.1rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
+    .input-group input:focus {
+      outline: none;
+      border-color: #E8A317;
+      box-shadow: 0 0 0 3px rgba(232, 163, 23, 0.1);
+      background: white;
+    }
 
-        .add-note-section {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 10px 40px rgba(244, 208, 63, 0.15);
-            border: 2px solid #F4D03F;
-            animation: slideUp 0.6s ease-out 0.2s both;
-        }
+    .input-group input::placeholder {
+      color: #B8860B;
+      opacity: 0.7;
+    }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .add-btn {
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #F4D03F 0%, #E8A317 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(232, 163, 23, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+    .add-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232, 163, 23, 0.4);
+    }
 
-        .form-group:last-of-type {
-            margin-bottom: 0;
-        }
+    .add-btn:active {
+      transform: translateY(0);
+    }
 
-        label {
-            display: block;
-            margin-bottom: 0.7rem;
-            color: #52B788;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    /* Notes Container */
+    .notes-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      animation: fadeIn 0.8s ease-in 0.2s both;
+    }
 
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #FFE4B5;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #FFFAF0;
-        }
+    /* Note Card */
+    .note {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(232, 163, 23, 0.12);
+      border-left: 5px solid #F4D03F;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
 
-        input[type="text"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #F4D03F;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(244, 208, 63, 0.1);
-        }
+    .note::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(244, 208, 63, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
 
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
+    .note:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(232, 163, 23, 0.2);
+      border-left-color: #E8A317;
+    }
 
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
+    .note h3 {
+      color: #E8A317;
+      margin-bottom: 0.75rem;
+      font-size: 1.3rem;
+      word-break: break-word;
+      position: relative;
+      z-index: 1;
+    }
 
-        button {
-            flex: 1;
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    .note p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      word-break: break-word;
+      position: relative;
+      z-index: 1;
+    }
 
-        #addBtn {
-            background: linear-gradient(135deg, #F4D03F 0%, #E8A317 100%);
-            color: white;
-            box-shadow: 0 5px 20px rgba(244, 208, 63, 0.3);
-        }
+    .delete-btn {
+      background: linear-gradient(135deg, #FF6B6B 0%, #EE5A52 100%);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
 
-        #addBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(244, 208, 63, 0.4);
-        }
+    .delete-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    }
 
-        #addBtn:active {
-            transform: translateY(0);
-        }
+    .delete-btn:active {
+      transform: scale(0.98);
+    }
 
-        .notes-section {
-            margin-top: 2rem;
-        }
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #B8860B;
+      font-size: 1.1rem;
+      animation: fadeIn 0.6s ease-in;
+    }
 
-        .notes-title {
-            font-size: 1.8rem;
-            color: #52B788;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
 
-        .notes-title::before {
-            content: "🌻";
-            font-size: 2rem;
-        }
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
 
-        #notes {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .note {
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 25px rgba(232, 163, 23, 0.12);
-            border-left: 5px solid #F4D03F;
-            transition: all 0.3s ease;
-            animation: noteAppear 0.4s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
+    @keyframes sway {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(2deg);
+      }
+      75% {
+        transform: rotate(-2deg);
+      }
+    }
 
-        @keyframes noteAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
 
-        .note::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #F4D03F, #E8A317);
-        }
+      .header h1 {
+        font-size: 2rem;
+      }
 
-        .note:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(232, 163, 23, 0.2);
-        }
+      .sunflower-icon {
+        font-size: 2rem;
+      }
 
-        .note-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #E8A317;
-            margin-bottom: 0.8rem;
-            word-break: break-word;
-        }
+      .add-note-section {
+        padding: 1.5rem;
+      }
 
-        .note-content {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 1.2rem;
-            word-break: break-word;
-            font-size: 0.95rem;
-        }
+      .notes-container {
+        grid-template-columns: 1fr;
+      }
 
-        .note-delete {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .note-delete:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
-        }
-
-        .note-delete:active {
-            transform: scale(0.98);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: #52B788;
-        }
-
-        .empty-state-emoji {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .empty-state-text {
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
-
-        /* Footer with credit */
-        .footer {
-            position: fixed;
-            bottom: 1rem;
-            right: 1.5rem;
-            font-size: 0.85rem;
-            color: #52B788;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 0.6rem 1rem;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(82, 183, 136, 0.15);
-            border: 1px solid #F4D03F;
-        }
-
-        .footer a {
-            color: #E8A317;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .footer a:hover {
-            color: #F4D03F;
-            text-decoration: underline;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .header-title {
-                font-size: 2.5rem;
-            }
-
-            .sunflower-emoji {
-                font-size: 2.5rem;
-                margin: 0 0.5rem;
-            }
-
-            #notes {
-                grid-template-columns: 1fr;
-            }
-
-            .add-note-section {
-                padding: 1.5rem;
-            }
-
-            .footer {
-                bottom: 0.5rem;
-                right: 0.5rem;
-                font-size: 0.75rem;
-                padding: 0.5rem 0.8rem;
-            }
-        }
-    </style>
+      .input-group {
+        gap: 0.75rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Decorative floating petals -->
-    <div class="petal">🌻</div>
-    <div class="petal">🌻</div>
-    <div class="petal">🌻</div>
-    <div class="petal">🌻</div>
-
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1 class="header-title">
-                <span class="sunflower-emoji">🌻</span>
-                Sunflower Notes
-                <span class="sunflower-emoji">🌻</span>
-            </h1>
-            <p class="subtitle">Bloom your thoughts into beautiful notes</p>
-        </div>
-
-        <!-- Add Note Section -->
-        <div class="add-note-section">
-            <div class="form-group">
-                <label for="title">Note Title</label>
-                <input type="text" id="title" placeholder="What's on your mind?" />
-            </div>
-            <div class="form-group">
-                <label for="content">Note Content</label>
-                <textarea id="content" placeholder="Write your thoughts here..."></textarea>
-            </div>
-            <div class="button-group">
-                <button id="addBtn">✨ Add Note</button>
-            </div>
-        </div>
-
-        <!-- Notes Display Section -->
-        <div class="notes-section">
-            <h2 class="notes-title">Your Notes</h2>
-            <div id="notes">
-                <div class="empty-state">
-                    <span class="empty-state-emoji">🌱</span>
-                    <p class="empty-state-text">No notes yet. Plant your first seed of thought!</p>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="sunflower-icon">🌻</div>
+      <h1>Sunflower Notes</h1>
+      <p>Capture your thoughts, one petal at a time</p>
     </div>
 
-    <!-- Footer with credit -->
-    <div class="footer">
-        made by <a href="https://github.com/gg-hgew" target="_blank" rel="noopener noreferrer">gg</a>
+    <!-- Add Note Section -->
+    <div class="add-note-section">
+      <h2>✨ Create a New Note</h2>
+      <div class="input-group">
+        <input id="title" placeholder="Give your note a title..." type="text">
+        <input id="content" placeholder="Write your thoughts here..." type="text">
+      </div>
+      <button id="addBtn" class="add-btn">Add Note</button>
     </div>
 
-    <script>
-        const baseUrl = "http://localhost:5000";
+    <!-- Notes Display -->
+    <div id="notes" class="notes-container"></div>
+  </div>
 
-        async function loadNotes() {
-            const res = await fetch(`${baseUrl}/notes`);
-            const notes = await res.json();
-            const container = document.getElementById("notes");
-            
-            if (notes.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <span class="empty-state-emoji">🌱</span>
-                        <p class="empty-state-text">No notes yet. Plant your first seed of thought!</p>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = notes.map(n => `
-                    <div class="note">
-                        <div class="note-title">${n.title}</div>
-                        <div class="note-content">${n.content}</div>
-                        <button class="note-delete" onclick="deleteNote('${n.title}')">🗑️ Delete</button>
-                    </div>
-                `).join("");
-            }
-        }
+  <script>
+    const baseUrl = "http://localhost:5000";
 
-        async function addNote() {
-            const title = document.getElementById("title").value.trim();
-            const content = document.getElementById("content").value.trim();
-            
-            if (!title || !content) {
-                alert("Please fill in both title and content!");
-                return;
-            }
+    async function loadNotes() {
+      const res = await fetch(`${baseUrl}/notes`);
+      const notes = await res.json();
+      const container = document.getElementById("notes");
+      
+      if (notes.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-state-icon">🌱</div>
+            <p>No notes yet. Plant your first seed of inspiration!</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = notes.map(n => `
+          <div class="note">
+            <h3>${n.title}</h3>
+            <p>${n.content}</p>
+            <button class="delete-btn" onclick="deleteNote('${n.title}')">Delete</button>
+          </div>
+        `).join("");
+      }
+    }
 
-            await fetch(`${baseUrl}/notes`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title, content })
-            });
+    async function addNote() {
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+      
+      if (!title || !content) {
+        alert("Please fill in both title and content!");
+        return;
+      }
+      
+      await fetch(`${baseUrl}/notes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, content })
+      });
+      
+      document.getElementById("title").value = "";
+      document.getElementById("content").value = "";
+      loadNotes();
+    }
 
-            document.getElementById("title").value = "";
-            document.getElementById("content").value = "";
-            loadNotes();
-        }
-
-        async function deleteNote(title) {
-            if (confirm("Are you sure you want to delete this note?")) {
-                await fetch(`${baseUrl}/notes/${title}`, { method: "DELETE" });
-                loadNotes();
-            }
-        }
-
-        document.getElementById("addBtn").addEventListener("click", addNote);
-        document.getElementById("title").addEventListener("keypress", (e) => {
-            if (e.key === "Enter") addNote();
-        });
-        document.getElementById("content").addEventListener("keypress", (e) => {
-            if (e.key === "Ctrl+Enter" || e.key === "Meta+Enter") addNote();
-        });
-
+    async function deleteNote(title) {
+      if (confirm("Are you sure you want to delete this note?")) {
+        await fetch(`${baseUrl}/notes/${title}`, { method: "DELETE" });
         loadNotes();
-    </script>
+      }
+    }
+
+    document.getElementById("addBtn").addEventListener("click", addNote);
+    document.getElementById("title").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") document.getElementById("content").focus();
+    });
+    document.getElementById("content").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") addNote();
+    });
+    
+    loadNotes();
+  </script>
 </body>
 </html>
