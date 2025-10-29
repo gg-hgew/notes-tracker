@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notes Tracker</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .note { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>My Notes</h1>
+  <div id="notes"></div>
+
+  <h3>Add a Note</h3>
+  <input id="title" placeholder="Title">
+  <input id="content" placeholder="Content">
+  <button id="addBtn">Add</button>
+
+  <script>
+    const baseUrl = "http://localhost:5000";
+
+    async function loadNotes() {
+      const res = await fetch(`${baseUrl}/notes`);
+      const notes = await res.json();
+      const container = document.getElementById("notes");
+      container.innerHTML = notes.map(n => `
+        <div class="note">
+          <h3>${n.title}</h3>
+          <p>${n.content}</p>
+          <button onclick="deleteNote('${n.title}')">Delete</button>
+        </div>
+      `).join("");
+    }
+
+    async function addNote() {
+      const title = document.getElementById("title").value;
+      const content = document.getElementById("content").value;
+      await fetch(`${baseUrl}/notes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, content })
+      });
+      loadNotes();
+    }
+
+    async function deleteNote(title) {
+      await fetch(`${baseUrl}/notes/${title}`, { method: "DELETE" });
+      loadNotes();
+    }
+
+    document.getElementById("addBtn").addEventListener("click", addNote);
+    loadNotes();
+  </script>
+</body>
+</html>
